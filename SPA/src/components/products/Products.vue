@@ -6,12 +6,19 @@
             <li v-for="col in productColumns" class="list-group-item fixed-width">
                 {{ col.display }}
             </li>
+            <li class="list-group-item fixed-width">Ações</li>
         </ul>
-        <ul v-for="product in products" class="list-group list-group-horizontal list-group-flush">
-            <li v-for="col in productColumns" class="list-group-item fixed-width">
-                {{ product[col.name] }}
-            </li>
-        </ul>
+        <div v-for="product in products">
+            <ul v-if="!product.isUpdating" class="list-group list-group-horizontal list-group-flush">
+                <li v-for="col in productColumns" class="list-group-item fixed-width">
+                    {{ product[col.name] }}
+                </li>
+                <li class="list-group-item fixed-width">
+                    <button type="button" class="btn btn-light" @click="">Alterar</button>
+                    <button type="button" class="btn btn-danger" @click="askDeleteProduct(product)">Excluir</button>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
@@ -32,8 +39,7 @@ export default {
     },
     methods: {
         getAllProducts() {
-            http
-                .get('product/getAll')
+            http.get('product/getAll')
                 .then(response => {
                     this.products = response.data
                 })
@@ -42,8 +48,7 @@ export default {
                 })
         },
         saveProduct(product) {
-            http
-                .post('product/save', product)
+            http.post('product/save', product)
                 .then(() => {
                     alert('Registro salvo')
                     this.getAllProducts()
@@ -51,6 +56,22 @@ export default {
                 .catch(() => {
                     alert('Erro ao salvar')
                 })
+        },
+        deleteProduct(product) {
+            http.delete('product/delete', { data: product })
+                .then(() => {
+                    alert('Registro excluído')
+                    this.getAllProducts()
+                })
+                .catch(() => {
+                    alert('Erro ao excluir')
+                })
+        },
+        askDeleteProduct(product) {
+            const confirmed = confirm('Voce realmente deseja apagar o produto ' + product.productID + '?')
+            if (confirmed) {
+                this.deleteProduct(product)
+            }
         }
     },
     created() {
@@ -63,7 +84,8 @@ export default {
 .centralizado {
     text-align: center;
 }
-.fixed-width{
+
+.fixed-width {
     width: 250px;
 }
 </style>
