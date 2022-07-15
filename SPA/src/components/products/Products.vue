@@ -23,7 +23,7 @@ export default {
 
     created() {
         http
-            .get('products')
+            .get('product/getAll')
             .then(response => {
                 this.products = response.data
                 console.log(this.products)
