@@ -55,8 +55,5 @@ export default {
 }
 </script>
 
-<style scoped>
-.fixed-width {
-    width: 250px;
-}
+<style>
 </style>

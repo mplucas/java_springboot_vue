@@ -30,4 +30,8 @@ export default {
   margin-top: 60px;
   padding: 30px;
 }
+
+.fixed-width {
+  width: 250px;
+}
 </style>

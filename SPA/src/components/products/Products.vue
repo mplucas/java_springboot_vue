@@ -83,8 +83,4 @@ export default {
 .centralizado {
     text-align: center;
 }
-
-.fixed-width {
-    width: 250px;
-}
 </style>
