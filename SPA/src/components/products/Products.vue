@@ -8,28 +8,25 @@
             </li>
             <li class="list-group-item fixed-width">Ações</li>
         </ul>
-        <div v-for="product in products">
-            <ul v-if="!product.isUpdating" class="list-group list-group-horizontal list-group-flush">
-                <li v-for="col in productColumns" class="list-group-item fixed-width">
-                    {{ product[col.name] }}
-                </li>
-                <li class="list-group-item fixed-width">
-                    <button type="button" class="btn btn-light" @click="">Alterar</button>
-                    <button type="button" class="btn btn-danger" @click="askDeleteProduct(product)">Excluir</button>
-                </li>
-            </ul>
+        <div v-for="product in products" v-bind:key="product.productID">
+            <line-product :register="product" :columns="productColumns" @onUpdate="saveProduct($event)"
+                @onDelete="askDeleteProduct($event)"></line-product>
         </div>
     </div>
 </template>
 
 <script>
 import http from '../../http/index.js'
-import AddRegisterButton from '../shared/addRegisterButton/AddRegisterButton.vue'
 import productColumns from '../../columns/productColumns.js'
+import AddRegisterButton from '../shared/addRegisterButton/AddRegisterButton.vue'
+import SaveRegisterInLine from "../shared/saveRegisterInLine/SaveRegisterInLine.vue"
+import GridLine from '../shared/gridLine/GridLine.vue'
 
 export default {
     components: {
-        "add-product": AddRegisterButton
+        "add-product": AddRegisterButton,
+        "update-product": SaveRegisterInLine,
+        "line-product": GridLine
     },
     data() {
         return {
@@ -51,10 +48,12 @@ export default {
             http.post('product/save', product)
                 .then(() => {
                     alert('Registro salvo')
-                    this.getAllProducts()
                 })
                 .catch(() => {
                     alert('Erro ao salvar')
+                })
+                .finally(() => {
+                    this.getAllProducts()
                 })
         },
         deleteProduct(product) {

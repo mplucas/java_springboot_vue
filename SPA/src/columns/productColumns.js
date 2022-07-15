@@ -1,5 +1,5 @@
 const columns = [
-    { name: 'productID', display: 'Código' },
+    { name: 'productID', display: 'Código', isKey: true },
     { name: 'description', display: 'Descrição' },
     { name: 'type', display: 'Tipo' },
     { name: 'buyPrice', display: 'Preço de compra' },
