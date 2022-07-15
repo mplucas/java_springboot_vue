@@ -1,33 +1,60 @@
 <template>
     <div>
         <h2 class="centralizado">Produtos</h2>
-        <ul class="list-group">
-            <li class="list-group-item">An item</li>
-            <li class="list-group-item">A second item</li>
-            <li class="list-group-item">A third item</li>
-            <li class="list-group-item">A fourth item</li>
-            <li class="list-group-item">And a fifth one</li>
+        <add-product @onAdd="saveProduct($event)" :columns="productColumns"></add-product>
+        <ul class="list-group list-group-horizontal">
+            <li v-for="col in productColumns" class="list-group-item fixed-width">
+                {{ col.display }}
+            </li>
+        </ul>
+        <ul v-for="product in products" class="list-group list-group-horizontal list-group-flush">
+            <li v-for="col in productColumns" class="list-group-item fixed-width">
+                {{ product[col.name] }}
+            </li>
         </ul>
     </div>
 </template>
 
 <script>
-import http from '../../http/index.ts'
+import http from '../../http/index.js'
+import AddRegisterButton from '../shared/addRegisterButton/AddRegisterButton.vue'
+import productColumns from '../../columns/productColumns.js'
 
 export default {
+    components: {
+        "add-product": AddRegisterButton
+    },
     data() {
         return {
-            products: []
+            products: [],
+            productColumns: productColumns
         }
     },
-
+    methods: {
+        getAllProducts() {
+            http
+                .get('product/getAll')
+                .then(response => {
+                    this.products = response.data
+                })
+                .catch(() => {
+                    alert('Erro ao buscar produtos')
+                })
+        },
+        saveProduct(product) {
+            http
+                .post('product/save', product)
+                .then(() => {
+                    alert('Registro salvo')
+                    this.getAllProducts()
+                })
+                .catch(() => {
+                    alert('Erro ao salvar')
+                })
+        }
+    },
     created() {
-        http
-            .get('product/getAll')
-            .then(response => {
-                this.products = response.data
-                console.log(this.products)
-            })
+        this.getAllProducts()
     }
 }
 </script>
@@ -35,5 +62,8 @@ export default {
 <style scoped>
 .centralizado {
     text-align: center;
+}
+.fixed-width{
+    width: 250px;
 }
 </style>

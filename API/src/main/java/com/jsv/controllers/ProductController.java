@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,12 +34,12 @@ public class ProductController {
 	}
 
 	@PostMapping(path="/save")
-	public void SaveProduct(Product product){
+	public void SaveProduct(@RequestBody Product product){
 		productRepository.save(product);
 	}
 
 	@PostMapping(path="/delete")
-	public void DeleteProduct(Product product){
+	public void DeleteProduct(@RequestBody Product product){
 		productRepository.delete(product);
 	}
 }

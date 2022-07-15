@@ -7,7 +7,7 @@
 
 <script>
 import Menu from './components/shared/menu/Menu.vue'
-import { routes } from './routes.ts'
+import { routes } from './routes.js'
 
 export default {
   components: {
@@ -28,5 +28,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   margin-top: 60px;
+  padding: 30px;
 }
 </style>
