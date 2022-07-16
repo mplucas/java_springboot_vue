@@ -19,13 +19,13 @@
 import http from '../../http/index.js'
 import productColumns from '../../columns/productColumns.js'
 import AddRegisterButton from '../shared/addRegisterButton/AddRegisterButton.vue'
-import SaveRegisterInLine from "../shared/saveRegisterInLine/SaveRegisterInLine.vue"
+import EditRegisterInLine from "../shared/editRegisterInLine/EditRegisterInLine.vue"
 import GridLine from '../shared/gridLine/GridLine.vue'
 
 export default {
     components: {
         "add-product": AddRegisterButton,
-        "update-product": SaveRegisterInLine,
+        "update-product": EditRegisterInLine,
         "line-product": GridLine
     },
     data() {
@@ -80,7 +80,4 @@ export default {
 </script>
 
 <style scoped>
-.centralizado {
-    text-align: center;
-}
 </style>

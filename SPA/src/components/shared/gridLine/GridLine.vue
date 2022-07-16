@@ -2,7 +2,8 @@
     <div>
         <ul v-if="!isUpdating" class="list-group list-group-horizontal list-group-flush">
             <li v-for="col in columns" class="list-group-item fixed-width">
-                {{ register[col.name] }}
+                <span v-if="!col.type">{{ register[col.name] }}</span>
+                <span v-if="col.type == 'dateTime'">{{ register[col.name] | date }}</span>
             </li>
             <li class="list-group-item fixed-width">
                 <button type="button" class="btn btn-light" @click="startUpdatingProduct()">Alterar</button>
@@ -16,11 +17,12 @@
 </template>
 
 <script>
-import SaveRegisterInLine from "../saveRegisterInLine/SaveRegisterInLine.vue"
+import EditRegisterInLine from "../editRegisterInLine/EditRegisterInLine.vue"
+import date from "../../../filters/date.js"
 
 export default {
     components: {
-        "update-line": SaveRegisterInLine
+        "update-line": EditRegisterInLine
     },
     data() {
         return {
@@ -51,6 +53,9 @@ export default {
         emitDelete(register) {
             this.$emit('onDelete', register)
         }
+    },
+    filters: {
+        date
     }
 }
 </script>

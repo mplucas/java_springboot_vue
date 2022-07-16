@@ -1,8 +1,13 @@
 <template>
     <div>
         <div class="input-group input-group-sm mb-3">
-            <input v-for="col in columns" :placeholder="col.display" v-model="register[col.name]"
-                :disabled="isUpdating && col.isKey" type="text" class="form-control fixed-width">
+            <div v-for="col in columns" class="fixed-width">
+                <input v-if="!col.type" :placeholder="col.display" v-model="register[col.name]"
+                    :disabled="isUpdating && col.isKey" type="text" class="form-control fill-parent-width">
+                <datetime v-if="col.type == 'dateTime'" format="YYYY/MM/DD h:i:s" v-model="register[col.name]"
+                    :placeholder="col.display" :readonly="isUpdating && col.isKey" class="fill-parent-width">
+                </datetime>
+            </div>
             <div class="fixed-width">
                 <button class="btn btn-outline-secondary" type="button" @click="emitSave()">Salvar</button>
                 <button class="btn btn-outline-secondary" type="button" @click="emitCancel()">Cancelar</button>
@@ -12,8 +17,12 @@
 </template>
 
 <script>
+import datetime from 'vuejs-datetimepicker';
 
 export default {
+    components: {
+        datetime
+    },
     data() {
         return {
             isUpdating: false
@@ -43,5 +52,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.fill-parent-width {
+    width: 100%;
+}
 </style>

@@ -1,41 +1,79 @@
 package com.jsv.models;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
+import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@Entity
+@Table(name = "StockMovements")
 public class StockMovement {
-	private Product product;
+
+	@Id
+	@Column(name = "StockMovementID", length = 250, nullable = false)
+	private String stockMovementID;
+	@Column(name = "ProductID", length = 250, nullable = false)
+	private String productID;
+	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+	@Column(name = "SellDate", columnDefinition = "DATETIME", nullable = false)
+	private LocalDateTime sellDate;
+	@Column(name = "Type", length = 250)
 	private String type;
+	@Column(name = "SellPrice")
 	private double sellPrice;
-	private Date sellDate;
+	@Column(name = "QuantityMoved")
 	private double quantityMoved;
-	
-	public Product getProduct() {
-		return product;
+
+	public void refreshStockMovementID() {
+		this.stockMovementID = this.productID + this.sellDate.format(DateTimeFormatter.BASIC_ISO_DATE);
 	}
-	public void setProduct(Product product) {
-		this.product = product;
+
+	public String getStockMovementID() {
+		return stockMovementID;
 	}
+
+	public void setStockMovementID(String stockMovementID) {
+		this.stockMovementID = stockMovementID;
+	}
+
+	public String getProductID() {
+		return productID;
+	}
+
+	public void setProductID(String productID) {
+		this.productID = productID;
+	}
+
 	public String getType() {
 		return type;
 	}
+
 	public void setType(String type) {
 		this.type = type;
 	}
+
 	public double getSellPrice() {
 		return sellPrice;
 	}
+
 	public void setSellPrice(double sellPrice) {
 		this.sellPrice = sellPrice;
 	}
-	public Date getSellDate() {
+
+	public LocalDateTime getSellDate() {
 		return sellDate;
 	}
-	public void setSellDate(Date sellDate) {
+
+	public void setSellDate(LocalDateTime sellDate) {
 		this.sellDate = sellDate;
 	}
+
 	public double getQuantityMoved() {
 		return quantityMoved;
 	}
+
 	public void setQuantityMoved(double quantityMoved) {
 		this.quantityMoved = quantityMoved;
 	}

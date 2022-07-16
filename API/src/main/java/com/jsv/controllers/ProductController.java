@@ -23,12 +23,7 @@ public class ProductController {
     public ProductController(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
-	
-	@GetMapping(path="/test")
-	public Product Test() {
-		return new Product("1", "Produto teste", "Eletrodoméstico", 19.99, 20);
-	}
-	
+		
 	@GetMapping(path="/getAll")
 	public List<Product> GetProducts(){
 		return productRepository.findAll();

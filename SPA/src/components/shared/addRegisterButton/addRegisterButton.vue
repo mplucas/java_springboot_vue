@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import SaveRegisterInLine from "../saveRegisterInLine/SaveRegisterInLine.vue"
+import EditRegisterInLine from "../editRegisterInLine/EditRegisterInLine.vue"
 
 export default {
     components: {
-        "add-register-inline": SaveRegisterInLine
+        "add-register-inline": EditRegisterInLine
     },
     data() {
         return {

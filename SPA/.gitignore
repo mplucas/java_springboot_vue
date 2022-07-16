@@ -1,8 +1,11 @@
 .DS_Store
-node_modules/
 dist/
 npm-debug.log
 yarn-error.log
+
+# Edited third party component
+node_modules/*
+!node_modules/vuejs-datetimepicker
 
 # Editor directories and files
 .idea

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="main-body">
     <menu-header :routes="routes"></menu-header>
     <router-view></router-view>
   </div>
@@ -22,7 +22,7 @@ export default {
 </script>
 
 <style>
-#app {
+#main-body {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -33,5 +33,9 @@ export default {
 
 .fixed-width {
   width: 250px;
+}
+
+.centralizado {
+    text-align: center;
 }
 </style>
