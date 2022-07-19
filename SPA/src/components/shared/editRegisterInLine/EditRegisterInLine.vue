@@ -4,7 +4,7 @@
             <div v-for="col in columns" class="fixed-width">
                 <input v-if="!col.type" :placeholder="col.display" v-model="register[col.name]"
                     :disabled="isUpdating && col.isKey" type="text" class="form-control fill-parent-width">
-                <datetime v-if="col.type == 'dateTime'" format="YYYY/MM/DD h:i:s" v-model="register[col.name]"
+                <datetime v-if="col.type == 'dateTime'" format="YYYY/MM/DD H:i:s" v-model="register[col.name]"
                     :placeholder="col.display" :readonly="isUpdating && col.isKey" class="fill-parent-width">
                 </datetime>
             </div>

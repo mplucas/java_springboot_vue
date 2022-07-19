@@ -5,8 +5,6 @@ import java.time.format.DateTimeFormatter;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 @Entity
 @Table(name = "StockMovements")
 public class StockMovement {
@@ -16,7 +14,6 @@ public class StockMovement {
 	private String stockMovementID;
 	@Column(name = "ProductID", length = 250, nullable = false)
 	private String productID;
-	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
 	@Column(name = "SellDate", columnDefinition = "DATETIME", nullable = false)
 	private LocalDateTime sellDate;
 	@Column(name = "Type", length = 250)
@@ -27,7 +24,7 @@ public class StockMovement {
 	private double quantityMoved;
 
 	public void refreshStockMovementID() {
-		this.stockMovementID = this.productID + this.sellDate.format(DateTimeFormatter.BASIC_ISO_DATE);
+		this.stockMovementID = this.productID + this.sellDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 	}
 
 	public String getStockMovementID() {
