@@ -4,6 +4,7 @@
             <li v-for="col in columns" class="list-group-item fixed-width">
                 <span v-if="!col.type">{{ register[col.name] }}</span>
                 <span v-if="col.type == 'dateTime'">{{ register[col.name] | date }}</span>
+                <span v-if="col.type == 'dropDown'" class="drop-down-field">{{ register[col.name] }}</span>
             </li>
             <li class="list-group-item fixed-width">
                 <button type="button" class="btn btn-light" @click="startUpdatingProduct()">Alterar</button>
@@ -60,5 +61,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.drop-down-field {
+    font-weight: bold;
+}
 </style>

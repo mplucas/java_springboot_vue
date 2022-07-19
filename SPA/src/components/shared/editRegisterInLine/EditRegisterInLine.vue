@@ -7,6 +7,10 @@
                 <datetime v-if="col.type == 'dateTime'" format="YYYY/MM/DD H:i:s" v-model="register[col.name]"
                     :placeholder="col.display" :readonly="isUpdating && col.isKey" class="fill-parent-width">
                 </datetime>
+                <select v-if="col.type == 'dropDown'" v-model="register[col.name]"
+                    class="form-control fill-parent-width">
+                    <option v-for="option in col.options" :value="option">{{ option }}</option>
+                </select>
             </div>
             <div class="fixed-width">
                 <button class="btn btn-outline-secondary" type="button" @click="emitSave()">Salvar</button>
