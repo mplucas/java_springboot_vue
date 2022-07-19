@@ -6,13 +6,17 @@ import javax.persistence.*;
 @Table(name = "Products")
 public class Product {
 
+	enum ProductType {
+		Eletrônico, Eletrodoméstico, Móvel
+	}
+
 	@Id
 	@Column(name = "ProductID", length = 250, nullable = false)
 	private String productID;
 	@Column(name = "Description", length = 250)
 	private String description;
-	@Column(name = "Type", length = 250)
-	private String type;
+	@Column(name = "Type", length = 250, nullable = false)
+	private ProductType type;
 	@Column(name = "BuyPrice")
 	private double buyPrice;
 	@Column(name = "StockQuantity")
@@ -22,7 +26,7 @@ public class Product {
 
 	}
 
-	public Product(String productID, String description, String type, double buyPrice, double stockQuantity) {
+	public Product(String productID, String description, ProductType type, double buyPrice, double stockQuantity) {
 		this.productID = productID;
 		this.description = description;
 		this.type = type;
@@ -46,11 +50,11 @@ public class Product {
 		this.description = description;
 	}
 
-	public String getType() {
+	public ProductType getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(ProductType type) {
 		this.type = type;
 	}
 

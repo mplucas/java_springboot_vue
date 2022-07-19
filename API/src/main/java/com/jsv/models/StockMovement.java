@@ -9,6 +9,10 @@ import javax.persistence.*;
 @Table(name = "StockMovements")
 public class StockMovement {
 
+	enum StockMovementType {
+		Entrada, Saída
+	}
+
 	@Id
 	@Column(name = "StockMovementID", length = 250, nullable = false)
 	private String stockMovementID;
@@ -16,8 +20,8 @@ public class StockMovement {
 	private String productID;
 	@Column(name = "SellDate", columnDefinition = "DATETIME", nullable = false)
 	private LocalDateTime sellDate;
-	@Column(name = "Type", length = 250)
-	private String type;
+	@Column(name = "Type", length = 250, nullable = false)
+	private StockMovementType type;
 	@Column(name = "SellPrice")
 	private double sellPrice;
 	@Column(name = "QuantityMoved")
@@ -43,11 +47,11 @@ public class StockMovement {
 		this.productID = productID;
 	}
 
-	public String getType() {
+	public StockMovementType getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(StockMovementType type) {
 		this.type = type;
 	}
 
