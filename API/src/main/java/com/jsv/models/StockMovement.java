@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "StockMovements")
 public class StockMovement {
 
-	enum StockMovementType {
+	public enum StockMovementType {
 		Entrada, Saída
 	}
 

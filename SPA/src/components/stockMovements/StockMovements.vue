@@ -6,11 +6,10 @@
             <li v-for="col in stockMovementColumns" class="list-group-item fixed-width">
                 {{ col.display }}
             </li>
-            <li class="list-group-item fixed-width">Ações</li>
         </ul>
         <div v-for="stockMovement in stockMovements">
-            <line-stock-movement :register="stockMovement" :columns="stockMovementColumns"
-                @onUpdate="saveStockMovement($event)" @onDelete="askDeleteStockMovement($event)"></line-stock-movement>
+            <line-stock-movement :register="stockMovement" :columns="stockMovementColumns" :canEdit="false">
+            </line-stock-movement>
         </div>
     </div>
 </template>
@@ -49,7 +48,8 @@ export default {
                 .then(() => {
                     alert('Registro salvo')
                 })
-                .catch(() => {
+                .catch((error) => {
+                    debugger
                     alert('Erro ao salvar')
                 })
                 .finally(() => {
