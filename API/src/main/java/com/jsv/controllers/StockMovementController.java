@@ -2,12 +2,10 @@ package com.jsv.controllers;
 
 import java.util.List;
 
-import javax.persistence.TypedQuery;
-
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,24 +52,26 @@ public class StockMovementController {
     private void ValidateIfHasStockQuantityIfNecessary(StockMovement stockMovement) throws Exception {
         if (stockMovement.getType() != StockMovementType.Saída)
             return;
-        StockMovement searchSM = new StockMovement();
-        searchSM.setProductID(stockMovement.getProductID());
-        List<StockMovement> stockMovementsByProductID = stockMovementRepository.findAll(Example.of(searchSM));
-        double productQuantityInStock = stockMovementsByProductID.stream()
-                .mapToDouble(sm -> sm.getQuantityMoved() * (sm.getType() == StockMovementType.Saída ? -1 : 1))
-                .sum();
+        double productQuantityInStock = GetProductQuantityInStock(stockMovement.getProductID());
         if (productQuantityInStock - stockMovement.getQuantityMoved() < 0)
             throw new Exception("Saída inválida, sem estoque para o produto.");
+    }
+
+    private double GetProductQuantityInStock(String productID) {
+        ExampleMatcher ignoringExampleMatcher = ExampleMatcher.matchingAny()
+                .withIgnorePaths("sellPrice", "quantityMoved");
+        StockMovement searchSM = new StockMovement();
+        searchSM.setProductID(productID);
+        Example<StockMovement> exampleSM = Example.of(searchSM, ignoringExampleMatcher);
+        List<StockMovement> stockMovementsByProductID = stockMovementRepository.findAll(exampleSM);
+        return stockMovementsByProductID.stream()
+                .mapToDouble(sm -> sm.getQuantityMoved() * (sm.getType() == StockMovementType.Saída ? -1 : 1))
+                .sum();
     }
 
     @DeleteMapping(path = "/delete")
     public void DeleteStockMovement(@RequestBody StockMovement stockMovement) {
         stockMovement.refreshStockMovementID();
         stockMovementRepository.delete(stockMovement);
-    }
-
-    @ExceptionHandler()
-    public void handleException() {
-        
     }
 }

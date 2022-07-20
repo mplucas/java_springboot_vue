@@ -49,8 +49,7 @@ export default {
                     alert('Registro salvo')
                 })
                 .catch((error) => {
-                    debugger
-                    alert('Erro ao salvar')
+                    alert('Erro ao salvar: ' + error.response.data.message)
                 })
                 .finally(() => {
                     this.getAllStockMovements()
