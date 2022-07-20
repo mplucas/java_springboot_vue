@@ -6,7 +6,7 @@
                 <span v-if="col.type == 'dateTime'">{{ register[col.name] | date }}</span>
                 <span v-if="col.type == 'dropDown'" class="drop-down-field">{{ register[col.name] }}</span>
             </li>
-            <li class="list-group-item fixed-width">
+            <li v-if="canEdit" class="list-group-item fixed-width">
                 <button type="button" class="btn btn-light" @click="startUpdatingProduct()">Alterar</button>
                 <button type="button" class="btn btn-danger" @click="emitDelete(register)">Excluir</button>
             </li>
@@ -38,6 +38,10 @@ export default {
         columns: {
             type: Array,
             required: true
+        },
+        canEdit: {
+            type: Boolean,
+            default: true
         }
     },
     methods: {

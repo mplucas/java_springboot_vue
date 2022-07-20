@@ -2,7 +2,7 @@
     <div>
         <div class="input-group input-group-sm mb-3">
             <div v-for="col in columns" class="fixed-width">
-                <input v-if="!col.type" :placeholder="col.display" v-model="register[col.name]"
+                <input v-if="!col.type" v-model="register[col.name]" :placeholder="col.display"
                     :disabled="isUpdating && col.isKey" type="text" class="form-control fill-parent-width">
                 <datetime v-if="col.type == 'dateTime'" format="YYYY/MM/DD H:i:s" v-model="register[col.name]"
                     :placeholder="col.display" :readonly="isUpdating && col.isKey" class="fill-parent-width">
