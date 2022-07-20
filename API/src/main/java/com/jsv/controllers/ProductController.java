@@ -25,17 +25,17 @@ public class ProductController {
     }
 		
 	@GetMapping(path="/getAll")
-	public List<Product> GetProducts(){
+	public List<Product> getProducts(){
 		return productRepository.findAll();
 	}
 
 	@PostMapping(path="/save")
-	public void SaveProduct(@RequestBody Product product){
+	public void saveProduct(@RequestBody Product product){
 		productRepository.save(product);
 	}
 
 	@DeleteMapping(path="/delete")
-	public void DeleteProduct(@RequestBody Product product){
+	public void deleteProduct(@RequestBody Product product){
 		productRepository.delete(product);
 	}
 }

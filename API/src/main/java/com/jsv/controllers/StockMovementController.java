@@ -28,22 +28,22 @@ public class StockMovementController {
     }
 
     @GetMapping(path = "/getAll")
-    public List<StockMovement> GetStockMovements() {
+    public List<StockMovement> getStockMovements() {
         return stockMovementRepository.findAll();
     }
 
     @PostMapping(path = "/save")
-    public void SaveStockMovement(@RequestBody StockMovement stockMovement) throws Exception {
-        ValidateNewStockMovement(stockMovement);
+    public void saveStockMovement(@RequestBody StockMovement stockMovement) throws Exception {
+        validateNewStockMovement(stockMovement);
         stockMovementRepository.save(stockMovement);
     }
 
-    private void ValidateNewStockMovement(StockMovement stockMovement) throws Exception {
-        ValidateIfExists(stockMovement);
-        ValidateIfHasStockQuantityIfNecessary(stockMovement);
+    private void validateNewStockMovement(StockMovement stockMovement) throws Exception {
+        validateIfExists(stockMovement);
+        validateIfHasStockQuantityIfNecessary(stockMovement);
     }
 
-    private void ValidateIfExists(StockMovement stockMovement) throws Exception {
+    private void validateIfExists(StockMovement stockMovement) throws Exception {
         ExampleMatcher ignoringExampleMatcher = ExampleMatcher.matching()
                 .withIgnorePaths("type", "sellPrice", "quantityMoved");
         StockMovement searchSM = new StockMovement();
@@ -54,15 +54,15 @@ public class StockMovementController {
             throw new Exception("Movimentação já existe.");
     }
 
-    private void ValidateIfHasStockQuantityIfNecessary(StockMovement stockMovement) throws Exception {
+    private void validateIfHasStockQuantityIfNecessary(StockMovement stockMovement) throws Exception {
         if (stockMovement.getType() != StockMovementType.Saída)
             return;
-        double productQuantityInStock = GetProductQuantityInStock(stockMovement.getProductID());
+        double productQuantityInStock = getProductQuantityInStock(stockMovement.getProductID());
         if (productQuantityInStock - stockMovement.getQuantityMoved() < 0)
             throw new Exception("Saída inválida, sem estoque para o produto.");
     }
 
-    private double GetProductQuantityInStock(String productID) {
+    private double getProductQuantityInStock(String productID) {
         ExampleMatcher ignoringExampleMatcher = ExampleMatcher.matching()
                 .withIgnorePaths("sellDate", "type", "sellPrice", "quantityMoved");
         StockMovement searchSM = new StockMovement();
@@ -75,7 +75,7 @@ public class StockMovementController {
     }
 
     @DeleteMapping(path = "/delete")
-    public void DeleteStockMovement(@RequestBody StockMovement stockMovement) {
+    public void deleteStockMovement(@RequestBody StockMovement stockMovement) {
         stockMovementRepository.delete(stockMovement);
     }
 }
