@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "Products")
 public class Product {
 
-	private enum ProductType {
+	public enum ProductType {
 		Eletrônico, Eletrodoméstico, Móvel
 	}
 
