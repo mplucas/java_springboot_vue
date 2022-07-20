@@ -73,4 +73,8 @@ public class Product {
 	public void setStockQuantity(double stockQuantity) {
 		this.stockQuantity = stockQuantity;
 	}
+
+	public void addStockQuantity(double quantity) {
+		this.stockQuantity += quantity;
+	}
 }

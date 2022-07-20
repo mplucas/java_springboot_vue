@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,9 +40,11 @@ public class StockMovementController {
     }
 
     @PostMapping(path = "/save")
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public void saveStockMovement(@RequestBody StockMovement stockMovement) throws Exception {
         validateNewStockMovement(stockMovement);
         stockMovementRepository.save(stockMovement);
+        updateProductQuantity(stockMovement);
     }
 
     private void validateNewStockMovement(StockMovement stockMovement) throws Exception {
@@ -61,12 +65,7 @@ public class StockMovementController {
     }
 
     private void validateProduct(StockMovement stockMovement) throws Exception {
-        ExampleMatcher ignoringExampleMatcher = ExampleMatcher.matching()
-                .withIgnorePaths("description", "type", "buyPrice", "stockQuantity");
-        Product searchProduct = new Product();
-        searchProduct.setProductID(stockMovement.getProductID());
-        Example<Product> exampleProduct = Example.of(searchProduct, ignoringExampleMatcher);
-        if (productRepository.findOne(exampleProduct).isEmpty())
+        if (productRepository.findById(stockMovement.getProductID()).isEmpty())
             throw new Exception("Produto não cadastrado.");
     }
 
@@ -79,15 +78,16 @@ public class StockMovementController {
     }
 
     private double getProductQuantityInStock(String productID) {
-        ExampleMatcher ignoringExampleMatcher = ExampleMatcher.matching()
-                .withIgnorePaths("sellDate", "type", "sellPrice", "quantityMoved");
-        StockMovement searchSM = new StockMovement();
-        searchSM.setProductID(productID);
-        Example<StockMovement> exampleSM = Example.of(searchSM, ignoringExampleMatcher);
-        List<StockMovement> stockMovementsByProductID = stockMovementRepository.findAll(exampleSM);
-        return stockMovementsByProductID.stream()
-                .mapToDouble(sm -> sm.getQuantityMoved() * (sm.getType() == StockMovementType.Saída ? -1 : 1))
-                .sum();
+        Product product = productRepository.findById(productID).orElse(null);
+        return product.getStockQuantity();
+    }
+
+    private void updateProductQuantity(StockMovement stockMovement) {
+        Product product = productRepository.findById(stockMovement.getProductID()).orElse(null);
+        double quantityToAdd = stockMovement.getQuantityMoved()
+                * (stockMovement.getType() == StockMovementType.Saída ? -1 : 1);
+        product.addStockQuantity(quantityToAdd);
+        productRepository.save(product);
     }
 
     @DeleteMapping(path = "/delete")
