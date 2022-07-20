@@ -54,22 +54,6 @@ export default {
                 .finally(() => {
                     this.getAllStockMovements()
                 })
-        },
-        deleteStockMovement(stockMovement) {
-            http.delete('stockMovement/delete', { data: stockMovement })
-                .then(() => {
-                    alert('Registro excluído')
-                    this.getAllStockMovements()
-                })
-                .catch(() => {
-                    alert('Erro ao excluir')
-                })
-        },
-        askDeleteStockMovement(stockMovement) {
-            const confirmed = confirm('Voce realmente deseja apagar a movimentação ' + stockMovement.stockMovementID + '?')
-            if (confirmed) {
-                this.deleteStockMovement(stockMovement)
-            }
         }
     },
     created() {

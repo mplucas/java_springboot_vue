@@ -3,9 +3,9 @@
         <div class="input-group input-group-sm mb-3">
             <div v-for="col in columns" class="fixed-width">
                 <input v-if="!col.type" v-model="register[col.name]" :placeholder="col.display"
-                    :disabled="isUpdating && col.isKey" type="text" class="form-control fill-parent-width">
+                    :disabled="isUpdating && col.preventEdit" type="text" class="form-control fill-parent-width">
                 <datetime v-if="col.type == 'dateTime'" format="YYYY/MM/DD H:i:s" v-model="register[col.name]"
-                    :placeholder="col.display" :readonly="isUpdating && col.isKey" class="fill-parent-width">
+                    :placeholder="col.display" :readonly="isUpdating && col.preventEdit" class="fill-parent-width">
                 </datetime>
                 <select v-if="col.type == 'dropDown'" v-model="register[col.name]"
                     class="form-control fill-parent-width">
