@@ -1,43 +1,37 @@
 package com.jsv.models;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
+
+import com.jsv.models.compositeKeys.StockMovementID;
 
 @Entity
+@IdClass(StockMovementID.class)
 @Table(name = "StockMovements")
-public class StockMovement {
+public class StockMovement implements Serializable {
 
 	public enum StockMovementType {
 		Entrada, Saída
 	}
 
 	@Id
-	@Column(name = "StockMovementID", length = 250, nullable = false)
-	private String stockMovementID;
 	@Column(name = "ProductID", length = 250, nullable = false)
 	private String productID;
+	@Id
 	@Column(name = "SellDate", columnDefinition = "DATETIME", nullable = false)
 	private LocalDateTime sellDate;
 	@Column(name = "Type", length = 250, nullable = false)
 	private StockMovementType type;
 	@Column(name = "SellPrice")
 	private double sellPrice;
-	@Column(name = "QuantityMoved")
+	@Column(name = "QuantityMoved", nullable = false)
 	private double quantityMoved;
-
-	public void refreshStockMovementID() {
-		this.stockMovementID = this.productID + this.sellDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-	}
-
-	public String getStockMovementID() {
-		return stockMovementID;
-	}
-
-	public void setStockMovementID(String stockMovementID) {
-		this.stockMovementID = stockMovementID;
-	}
 
 	public String getProductID() {
 		return productID;

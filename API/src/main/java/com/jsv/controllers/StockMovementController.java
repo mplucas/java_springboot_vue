@@ -34,7 +34,6 @@ public class StockMovementController {
 
     @PostMapping(path = "/save")
     public void SaveStockMovement(@RequestBody StockMovement stockMovement) throws Exception {
-        stockMovement.refreshStockMovementID();
         ValidateNewStockMovement(stockMovement);
         stockMovementRepository.save(stockMovement);
     }
@@ -45,7 +44,13 @@ public class StockMovementController {
     }
 
     private void ValidateIfExists(StockMovement stockMovement) throws Exception {
-        if (!stockMovementRepository.findById(stockMovement.getStockMovementID()).isEmpty())
+        ExampleMatcher ignoringExampleMatcher = ExampleMatcher.matching()
+                .withIgnorePaths("type", "sellPrice", "quantityMoved");
+        StockMovement searchSM = new StockMovement();
+        searchSM.setProductID(stockMovement.getProductID());
+        searchSM.setSellDate(stockMovement.getSellDate());
+        Example<StockMovement> exampleSM = Example.of(searchSM, ignoringExampleMatcher);
+        if (!stockMovementRepository.findOne(exampleSM).isEmpty())
             throw new Exception("Movimentação já existe.");
     }
 
@@ -58,8 +63,8 @@ public class StockMovementController {
     }
 
     private double GetProductQuantityInStock(String productID) {
-        ExampleMatcher ignoringExampleMatcher = ExampleMatcher.matchingAny()
-                .withIgnorePaths("sellPrice", "quantityMoved");
+        ExampleMatcher ignoringExampleMatcher = ExampleMatcher.matching()
+                .withIgnorePaths("sellDate", "type", "sellPrice", "quantityMoved");
         StockMovement searchSM = new StockMovement();
         searchSM.setProductID(productID);
         Example<StockMovement> exampleSM = Example.of(searchSM, ignoringExampleMatcher);
@@ -71,7 +76,6 @@ public class StockMovementController {
 
     @DeleteMapping(path = "/delete")
     public void DeleteStockMovement(@RequestBody StockMovement stockMovement) {
-        stockMovement.refreshStockMovementID();
         stockMovementRepository.delete(stockMovement);
     }
 }
