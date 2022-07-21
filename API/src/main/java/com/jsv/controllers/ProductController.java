@@ -2,10 +2,6 @@ package com.jsv.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,21 +25,15 @@ import com.jsv.repository.StockMovementRepository;
 @RequestMapping(path = "/product")
 public class ProductController {
 
-	private final ProductRepository productRepository;
-	private final StockMovementRepository stockMovementRepository;
-
 	private ProductDAOImpl productDAO;
 
 	public ProductController(ProductRepository productRepository, StockMovementRepository stockMovementRepository) {
-		this.productRepository = productRepository;
-		this.stockMovementRepository = stockMovementRepository;
-
-		productDAO = new ProductDAOImpl(productRepository);
+		productDAO = new ProductDAOImpl(productRepository, stockMovementRepository);
 	}
 
 	@GetMapping(path = "/getAll")
 	public List<Product> getProducts() {
-		return productDAO.getProducts();
+		return productDAO.findAllProducts();
 	}
 
 	@GetMapping(path = "/getProductTypeSummary")
@@ -56,8 +46,8 @@ public class ProductController {
 	}
 
 	private ProductTypeSummaryDTO getProductTypeSummaryFor(ProductType productType) {
-		List<Product> productsByType = getProductsBy(productType);
-		double sellQuantity = getStockMovementsBy(productType).stream()
+		List<Product> productsByType = productDAO.getProductsBy(productType);
+		double sellQuantity = productDAO.getStockMovementsBy(productType).stream()
 				.filter(sm -> sm.getType() == StockMovementType.Saída)
 				.mapToDouble(sm -> sm.getQuantityMoved())
 				.sum();
@@ -67,38 +57,10 @@ public class ProductController {
 		return new ProductTypeSummaryDTO(productType, sellQuantity, currentQuantity);
 	}
 
-	private List<Product> getProductsBy(ProductType productType) {
-		return productRepository.findAll()
-				.stream()
-				.filter(p -> p.getType() == productType)
-				.toList();
-	}
-
-	private List<StockMovement> getStockMovementsBy(ProductType productType) {
-		List<String> productIDs = getProductsBy(productType).stream()
-				.map(p -> p.getProductID())
-				.distinct()
-				.collect(Collectors.toList());
-		List<StockMovement> stockMovements = new ArrayList<StockMovement>();
-		for (String productID : productIDs) {
-			stockMovements.addAll(getStockMovementsBy(productID));
-		}
-		return stockMovements;
-	}
-
-	private List<StockMovement> getStockMovementsBy(String productID) {
-		ExampleMatcher ignoringExampleMatcher = ExampleMatcher.matching()
-				.withIgnorePaths("sellDate", "type", "sellPrice", "quantityMoved");
-		StockMovement searchSM = new StockMovement();
-		searchSM.setProductID(productID);
-		Example<StockMovement> exampleSM = Example.of(searchSM, ignoringExampleMatcher);
-		return stockMovementRepository.findAll(exampleSM);
-	}
-
 	@GetMapping(path = "/getProductBalanceSummary")
 	public List<ProductBalanceSummaryDTO> getProductBalanceSummary() {
 		List<ProductBalanceSummaryDTO> productBalanceSummary = new ArrayList<ProductBalanceSummaryDTO>();
-		List<Product> products = productRepository.findAll();
+		List<Product> products = productDAO.findAllProducts();
 		for (Product product : products) {
 			productBalanceSummary.add(getProductBalanceSummaryFor(product.getProductID()));
 		}
@@ -106,7 +68,7 @@ public class ProductController {
 	}
 
 	private ProductBalanceSummaryDTO getProductBalanceSummaryFor(String productID) {
-		List<StockMovement> stockMovementsByProduct = getStockMovementsBy(productID);
+		List<StockMovement> stockMovementsByProduct = productDAO.getStockMovementsBy(productID);
 		double sellQuantity = stockMovementsByProduct.stream()
 				.filter(sm -> sm.getType() == StockMovementType.Saída)
 				.mapToDouble(sm -> sm.getQuantityMoved())

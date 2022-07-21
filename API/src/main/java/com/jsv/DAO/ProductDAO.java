@@ -2,18 +2,20 @@ package com.jsv.DAO;
 
 import java.util.List;
 
-import com.jsv.DTO.ProductBalanceSummaryDTO;
-import com.jsv.DTO.ProductTypeSummaryDTO;
 import com.jsv.models.Product;
+import com.jsv.models.StockMovement;
+import com.jsv.models.Product.ProductType;
 
 public interface ProductDAO {
-    public List<Product> getProducts();
-
-    public List<ProductTypeSummaryDTO> getProductTypeSummary();
-
-    public List<ProductBalanceSummaryDTO> getProductBalanceSummary();
+    public List<Product> findAllProducts();
 
     public void saveProduct(Product product);
 
     public void deleteProduct(Product product);
+
+    public List<Product> getProductsBy(ProductType productType);
+
+    public List<StockMovement> getStockMovementsBy(ProductType productType);
+
+    public List<StockMovement> getStockMovementsBy(String productID);
 }
