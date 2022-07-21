@@ -9,16 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
+import com.jsv.enums.StockMovementTypeEnum;
 import com.jsv.models.compositeKeys.StockMovementID;
 
 @Entity
 @IdClass(StockMovementID.class)
 @Table(name = "StockMovements")
 public class StockMovement implements Serializable {
-
-	public enum StockMovementType {
-		Entrada, Saída
-	}
 
 	@Id
 	@Column(name = "ProductID", length = 250, nullable = false)
@@ -27,7 +24,7 @@ public class StockMovement implements Serializable {
 	@Column(name = "SellDate", columnDefinition = "DATETIME", nullable = false)
 	private LocalDateTime sellDate;
 	@Column(name = "Type", length = 250, nullable = false)
-	private StockMovementType type;
+	private StockMovementTypeEnum type;
 	@Column(name = "SellPrice")
 	private double sellPrice;
 	@Column(name = "QuantityMoved", nullable = false)
@@ -41,11 +38,11 @@ public class StockMovement implements Serializable {
 		this.productID = productID;
 	}
 
-	public StockMovementType getType() {
+	public StockMovementTypeEnum getType() {
 		return type;
 	}
 
-	public void setType(StockMovementType type) {
+	public void setType(StockMovementTypeEnum type) {
 		this.type = type;
 	}
 

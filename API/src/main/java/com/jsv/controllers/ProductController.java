@@ -18,9 +18,9 @@ import com.jsv.DAO.Impl.StockMovementDAOImpl;
 import com.jsv.DTO.ProductBalanceSummaryDTO;
 import com.jsv.DTO.ProductTypeSummaryDTO;
 import com.jsv.enums.ProductTypeEnum;
+import com.jsv.enums.StockMovementTypeEnum;
 import com.jsv.models.Product;
 import com.jsv.models.StockMovement;
-import com.jsv.models.StockMovement.StockMovementType;
 import com.jsv.repository.ProductRepository;
 import com.jsv.repository.StockMovementRepository;
 
@@ -54,7 +54,7 @@ public class ProductController {
 	private ProductTypeSummaryDTO getProductTypeSummaryFor(ProductTypeEnum productType) {
 		List<Product> productsByType = productDAO.getProductsBy(productType);
 		double sellQuantity = stockMovementDAO.getStockMovementsBy(productType).stream()
-				.filter(sm -> sm.getType() == StockMovementType.Saída)
+				.filter(sm -> sm.getType() == StockMovementTypeEnum.Saída)
 				.mapToDouble(sm -> sm.getQuantityMoved())
 				.sum();
 		double currentQuantity = productsByType.stream()
@@ -76,12 +76,12 @@ public class ProductController {
 	private ProductBalanceSummaryDTO getProductBalanceSummaryFor(String productID) {
 		List<StockMovement> stockMovementsByProduct = stockMovementDAO.getStockMovementsBy(productID);
 		double sellQuantity = stockMovementsByProduct.stream()
-				.filter(sm -> sm.getType() == StockMovementType.Saída)
+				.filter(sm -> sm.getType() == StockMovementTypeEnum.Saída)
 				.mapToDouble(sm -> sm.getQuantityMoved())
 				.sum();
 		double totalProfit = stockMovementsByProduct.stream()
 				.mapToDouble(sm -> sm.getQuantityMoved() * sm.getSellPrice()
-						* (sm.getType() == StockMovementType.Saída ? 1 : -1))
+						* (sm.getType() == StockMovementTypeEnum.Saída ? 1 : -1))
 				.sum();
 		return new ProductBalanceSummaryDTO(productID, sellQuantity, totalProfit);
 	}

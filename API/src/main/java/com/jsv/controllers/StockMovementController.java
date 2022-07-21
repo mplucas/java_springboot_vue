@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jsv.DAO.Impl.ProductDAOImpl;
 import com.jsv.DAO.Impl.StockMovementDAOImpl;
+import com.jsv.enums.StockMovementTypeEnum;
 import com.jsv.models.Product;
 import com.jsv.models.StockMovement;
-import com.jsv.models.StockMovement.StockMovementType;
 import com.jsv.repository.ProductRepository;
 import com.jsv.repository.StockMovementRepository;
 
@@ -63,7 +63,7 @@ public class StockMovementController {
     }
 
     private void validateIfHasStockQuantityIfNecessary(StockMovement stockMovement) throws Exception {
-        if (stockMovement.getType() != StockMovementType.Saída)
+        if (stockMovement.getType() != StockMovementTypeEnum.Saída)
             return;
         double productQuantityInStock = getProductQuantityInStock(stockMovement.getProductID());
         if (productQuantityInStock - stockMovement.getQuantityMoved() < 0)
@@ -78,7 +78,7 @@ public class StockMovementController {
     private void updateProductQuantity(StockMovement stockMovement) {
         Product product = productDAO.findProductByID(stockMovement.getProductID()).orElse(null);
         double quantityToAdd = stockMovement.getQuantityMoved()
-                * (stockMovement.getType() == StockMovementType.Saída ? -1 : 1);
+                * (stockMovement.getType() == StockMovementTypeEnum.Saída ? -1 : 1);
         product.addStockQuantity(quantityToAdd);
         productDAO.saveProduct(product);
     }
