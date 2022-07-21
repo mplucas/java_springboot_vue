@@ -120,11 +120,11 @@ public class ProductController {
 
 	@PostMapping(path = "/save")
 	public void saveProduct(@RequestBody Product product) {
-		productRepository.save(product);
+		productDAO.saveProduct(product);
 	}
 
 	@DeleteMapping(path = "/delete")
 	public void deleteProduct(@RequestBody Product product) {
-		productRepository.delete(product);
+		productDAO.deleteProduct(product);
 	}
 }

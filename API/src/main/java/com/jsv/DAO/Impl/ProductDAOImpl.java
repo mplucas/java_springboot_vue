@@ -35,14 +35,13 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public void saveProduct(Product product) {
-        // TODO Auto-generated method stub
+        productRepository.save(product);
 
     }
 
     @Override
     public void deleteProduct(Product product) {
-        // TODO Auto-generated method stub
-
+        productRepository.delete(product);
     }
 
 }
