@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jsv.DAO.Impl.ProductDAOImpl;
+import com.jsv.DAO.Impl.StockMovementDAOImpl;
 import com.jsv.DTO.ProductBalanceSummaryDTO;
 import com.jsv.DTO.ProductTypeSummaryDTO;
 import com.jsv.models.Product;
@@ -25,10 +26,12 @@ import com.jsv.repository.StockMovementRepository;
 @RequestMapping(path = "/product")
 public class ProductController {
 
-	private ProductDAOImpl productDAO;
+	private final ProductDAOImpl productDAO;
+	private final StockMovementDAOImpl stockMovementDAO;
 
 	public ProductController(ProductRepository productRepository, StockMovementRepository stockMovementRepository) {
-		productDAO = new ProductDAOImpl(productRepository, stockMovementRepository);
+		productDAO = new ProductDAOImpl(productRepository);
+		stockMovementDAO = new StockMovementDAOImpl(productRepository, stockMovementRepository);
 	}
 
 	@GetMapping(path = "/getAll")
@@ -47,7 +50,7 @@ public class ProductController {
 
 	private ProductTypeSummaryDTO getProductTypeSummaryFor(ProductType productType) {
 		List<Product> productsByType = productDAO.getProductsBy(productType);
-		double sellQuantity = productDAO.getStockMovementsBy(productType).stream()
+		double sellQuantity = stockMovementDAO.getStockMovementsBy(productType).stream()
 				.filter(sm -> sm.getType() == StockMovementType.Saída)
 				.mapToDouble(sm -> sm.getQuantityMoved())
 				.sum();
@@ -68,7 +71,7 @@ public class ProductController {
 	}
 
 	private ProductBalanceSummaryDTO getProductBalanceSummaryFor(String productID) {
-		List<StockMovement> stockMovementsByProduct = productDAO.getStockMovementsBy(productID);
+		List<StockMovement> stockMovementsByProduct = stockMovementDAO.getStockMovementsBy(productID);
 		double sellQuantity = stockMovementsByProduct.stream()
 				.filter(sm -> sm.getType() == StockMovementType.Saída)
 				.mapToDouble(sm -> sm.getQuantityMoved())

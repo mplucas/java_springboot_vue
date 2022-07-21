@@ -30,7 +30,7 @@ public class StockMovementController {
     public StockMovementController(StockMovementRepository stockMovementRepository,
             ProductRepository productRepository) {
         stockMovementDAO = new StockMovementDAOImpl(productRepository, stockMovementRepository);
-        productDAO = new ProductDAOImpl(productRepository, stockMovementRepository);
+        productDAO = new ProductDAOImpl(productRepository);
     }
 
     @GetMapping(path = "/getAll")
