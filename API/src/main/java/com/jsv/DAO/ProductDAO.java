@@ -1,6 +1,7 @@
 package com.jsv.DAO;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.jsv.models.Product;
 import com.jsv.models.StockMovement;
@@ -18,4 +19,6 @@ public interface ProductDAO {
     public List<StockMovement> getStockMovementsBy(ProductType productType);
 
     public List<StockMovement> getStockMovementsBy(String productID);
+
+    public Optional<Product> findProductByID(String productID);
 }

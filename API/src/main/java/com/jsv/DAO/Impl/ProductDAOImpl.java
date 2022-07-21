@@ -2,6 +2,7 @@ package com.jsv.DAO.Impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Example;
@@ -69,5 +70,10 @@ public class ProductDAOImpl implements ProductDAO {
         searchSM.setProductID(productID);
         Example<StockMovement> exampleSM = Example.of(searchSM, ignoringExampleMatcher);
         return stockMovementRepository.findAll(exampleSM);
+    }
+
+    @Override
+    public Optional<Product> findProductByID(String productID) {
+        return productRepository.findById(productID);
     }
 }
