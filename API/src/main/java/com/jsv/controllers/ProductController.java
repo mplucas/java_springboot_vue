@@ -17,9 +17,9 @@ import com.jsv.DAO.Impl.ProductDAOImpl;
 import com.jsv.DAO.Impl.StockMovementDAOImpl;
 import com.jsv.DTO.ProductBalanceSummaryDTO;
 import com.jsv.DTO.ProductTypeSummaryDTO;
+import com.jsv.enums.ProductTypeEnum;
 import com.jsv.models.Product;
 import com.jsv.models.StockMovement;
-import com.jsv.models.Product.ProductType;
 import com.jsv.models.StockMovement.StockMovementType;
 import com.jsv.repository.ProductRepository;
 import com.jsv.repository.StockMovementRepository;
@@ -45,13 +45,13 @@ public class ProductController {
 	@GetMapping(path = "/getProductTypeSummary")
 	public List<ProductTypeSummaryDTO> getProductTypeSummary() {
 		List<ProductTypeSummaryDTO> productTypeSummaryDTOs = new ArrayList<ProductTypeSummaryDTO>();
-		for (ProductType productType : ProductType.values()) {
+		for (ProductTypeEnum productType : ProductTypeEnum.values()) {
 			productTypeSummaryDTOs.add(getProductTypeSummaryFor(productType));
 		}
 		return productTypeSummaryDTOs;
 	}
 
-	private ProductTypeSummaryDTO getProductTypeSummaryFor(ProductType productType) {
+	private ProductTypeSummaryDTO getProductTypeSummaryFor(ProductTypeEnum productType) {
 		List<Product> productsByType = productDAO.getProductsBy(productType);
 		double sellQuantity = stockMovementDAO.getStockMovementsBy(productType).stream()
 				.filter(sm -> sm.getType() == StockMovementType.Saída)

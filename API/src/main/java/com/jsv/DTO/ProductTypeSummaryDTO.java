@@ -1,23 +1,23 @@
 package com.jsv.DTO;
 
-import com.jsv.models.Product.ProductType;
+import com.jsv.enums.ProductTypeEnum;
 
 public class ProductTypeSummaryDTO {
-    private ProductType productType;
+    private ProductTypeEnum productType;
     private double sellQuantity;
     private double currentQuantity;
 
-    public ProductTypeSummaryDTO(ProductType productType, double sellQuantity, double currentQuantity) {
+    public ProductTypeSummaryDTO(ProductTypeEnum productType, double sellQuantity, double currentQuantity) {
         this.productType = productType;
         this.sellQuantity = sellQuantity;
         this.currentQuantity = currentQuantity;
     }
 
-    public ProductType getProductType() {
+    public ProductTypeEnum getProductType() {
         return productType;
     }
 
-    public void setProductType(ProductType productType) {
+    public void setProductType(ProductTypeEnum productType) {
         this.productType = productType;
     }
 

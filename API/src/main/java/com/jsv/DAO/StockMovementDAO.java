@@ -2,8 +2,8 @@ package com.jsv.DAO;
 
 import java.util.List;
 
+import com.jsv.enums.ProductTypeEnum;
 import com.jsv.models.StockMovement;
-import com.jsv.models.Product.ProductType;
 
 public interface StockMovementDAO {
     public List<StockMovement> findAllStockMovements();
@@ -12,7 +12,7 @@ public interface StockMovementDAO {
 
     public boolean existsStockMovement(StockMovement stockMovement);
 
-    public List<StockMovement> getStockMovementsBy(ProductType productType);
+    public List<StockMovement> getStockMovementsBy(ProductTypeEnum productType);
 
     public List<StockMovement> getStockMovementsBy(String productID);
 

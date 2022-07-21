@@ -2,13 +2,11 @@ package com.jsv.models;
 
 import javax.persistence.*;
 
+import com.jsv.enums.ProductTypeEnum;
+
 @Entity
 @Table(name = "Products")
 public class Product {
-
-	public enum ProductType {
-		Eletrônico, Eletrodoméstico, Móvel
-	}
 
 	@Id
 	@Column(name = "ProductID", length = 250, nullable = false)
@@ -16,7 +14,7 @@ public class Product {
 	@Column(name = "Description", length = 250)
 	private String description;
 	@Column(name = "Type", length = 250, nullable = false)
-	private ProductType type;
+	private ProductTypeEnum type;
 	@Column(name = "BuyPrice")
 	private double buyPrice;
 	@Column(name = "StockQuantity")
@@ -26,7 +24,7 @@ public class Product {
 
 	}
 
-	public Product(String productID, String description, ProductType type, double buyPrice, double stockQuantity) {
+	public Product(String productID, String description, ProductTypeEnum type, double buyPrice, double stockQuantity) {
 		this.productID = productID;
 		this.description = description;
 		this.type = type;
@@ -50,11 +48,11 @@ public class Product {
 		this.description = description;
 	}
 
-	public ProductType getType() {
+	public ProductTypeEnum getType() {
 		return type;
 	}
 
-	public void setType(ProductType type) {
+	public void setType(ProductTypeEnum type) {
 		this.type = type;
 	}
 

@@ -3,8 +3,8 @@ package com.jsv.DAO.Impl;
 import java.util.List;
 import java.util.Optional;
 import com.jsv.DAO.ProductDAO;
+import com.jsv.enums.ProductTypeEnum;
 import com.jsv.models.Product;
-import com.jsv.models.Product.ProductType;
 import com.jsv.repository.ProductRepository;
 
 public class ProductDAOImpl implements ProductDAO {
@@ -32,7 +32,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getProductsBy(ProductType productType) {
+    public List<Product> getProductsBy(ProductTypeEnum productType) {
         return productRepository.findAll()
                 .stream()
                 .filter(p -> p.getType() == productType)

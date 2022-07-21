@@ -8,8 +8,8 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 
 import com.jsv.DAO.StockMovementDAO;
+import com.jsv.enums.ProductTypeEnum;
 import com.jsv.models.StockMovement;
-import com.jsv.models.Product.ProductType;
 import com.jsv.repository.ProductRepository;
 import com.jsv.repository.StockMovementRepository;
 
@@ -45,7 +45,7 @@ public class StockMovementDAOImpl implements StockMovementDAO {
     }
 
     @Override
-    public List<StockMovement> getStockMovementsBy(ProductType productType) {
+    public List<StockMovement> getStockMovementsBy(ProductTypeEnum productType) {
         List<String> productIDs = productDAO.getProductsBy(productType).stream()
                 .map(p -> p.getProductID())
                 .distinct()
