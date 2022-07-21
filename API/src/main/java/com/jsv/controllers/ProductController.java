@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jsv.DTO.ProductBalanceSummaryDTO;
 import com.jsv.DTO.ProductTypeSummaryDTO;
 import com.jsv.models.Product;
 import com.jsv.models.StockMovement;
@@ -87,6 +88,29 @@ public class ProductController {
 		searchSM.setProductID(productID);
 		Example<StockMovement> exampleSM = Example.of(searchSM, ignoringExampleMatcher);
 		return stockMovementRepository.findAll(exampleSM);
+	}
+
+	@GetMapping(path = "/getProductBalanceSummary")
+	public List<ProductBalanceSummaryDTO> getProductBalanceSummary() {
+		List<ProductBalanceSummaryDTO> productBalanceSummary = new ArrayList<ProductBalanceSummaryDTO>();
+		List<Product> products = productRepository.findAll();
+		for (Product product : products) {
+			productBalanceSummary.add(getProductBalanceSummaryFor(product.getProductID()));
+		}
+		return productBalanceSummary;
+	}
+
+	private ProductBalanceSummaryDTO getProductBalanceSummaryFor(String productID) {
+		List<StockMovement> stockMovementsByProduct = getStockMovementsBy(productID);
+		double sellQuantity = stockMovementsByProduct.stream()
+				.filter(sm -> sm.getType() == StockMovementType.Saída)
+				.mapToDouble(sm -> sm.getQuantityMoved())
+				.sum();
+		double totalProfit = stockMovementsByProduct.stream()
+				.mapToDouble(sm -> sm.getQuantityMoved() * sm.getSellPrice()
+						* (sm.getType() == StockMovementType.Saída ? 1 : -1))
+				.sum();
+		return new ProductBalanceSummaryDTO(productID, sellQuantity, totalProfit);
 	}
 
 	@PostMapping(path = "/save")
