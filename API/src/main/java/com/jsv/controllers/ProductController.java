@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jsv.DAO.Impl.ProductDAOImpl;
 import com.jsv.DTO.ProductBalanceSummaryDTO;
 import com.jsv.DTO.ProductTypeSummaryDTO;
 import com.jsv.models.Product;
@@ -31,14 +32,18 @@ public class ProductController {
 	private final ProductRepository productRepository;
 	private final StockMovementRepository stockMovementRepository;
 
+	private ProductDAOImpl productDAO;
+
 	public ProductController(ProductRepository productRepository, StockMovementRepository stockMovementRepository) {
 		this.productRepository = productRepository;
 		this.stockMovementRepository = stockMovementRepository;
+
+		productDAO = new ProductDAOImpl(productRepository);
 	}
 
 	@GetMapping(path = "/getAll")
 	public List<Product> getProducts() {
-		return productRepository.findAll();
+		return productDAO.getProducts();
 	}
 
 	@GetMapping(path = "/getProductTypeSummary")
