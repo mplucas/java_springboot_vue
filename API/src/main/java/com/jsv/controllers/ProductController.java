@@ -2,6 +2,9 @@ package com.jsv.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,7 +92,9 @@ public class ProductController {
 	}
 
 	@DeleteMapping(path = "/delete")
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void deleteProduct(@RequestBody Product product) {
 		productDAO.deleteProduct(product);
+		stockMovementDAO.deleteStockMovementsBy(product.getProductID());
 	}
 }

@@ -15,4 +15,6 @@ public interface StockMovementDAO {
     public List<StockMovement> getStockMovementsBy(ProductType productType);
 
     public List<StockMovement> getStockMovementsBy(String productID);
+
+    public void deleteStockMovementsBy(String productID);
 }

@@ -66,4 +66,12 @@ public class StockMovementDAOImpl implements StockMovementDAO {
         Example<StockMovement> exampleSM = Example.of(searchSM, ignoringExampleMatcher);
         return stockMovementRepository.findAll(exampleSM);
     }
+
+    @Override
+    public void deleteStockMovementsBy(String productID) {
+        List<StockMovement> stockMovements = getStockMovementsBy(productID);
+        for (StockMovement stockMovement : stockMovements) {
+            stockMovementRepository.delete(stockMovement);
+        }
+    }
 }
